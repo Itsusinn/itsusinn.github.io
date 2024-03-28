@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>iHsin的站点</title><link>https://itsusinn.github.io/post/</link><description>Recent content on iHsin的站点</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sun, 27 Aug 2023 21:55:07 +0800</lastBuildDate><atom:link href="https://itsusinn.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Linux Tips</title><link>https://itsusinn.github.io/p/linux-tips/</link><pubDate>Sun, 27 Aug 2023 21:55:07 +0800</pubDate><guid>https://itsusinn.github.io/p/linux-tips/</guid><description>&lt;h3 id="创建顶级btrfs子卷">创建顶级Btrfs子卷&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">$ fdisk -l
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ sudo mount /dev/&amp;lt;part&amp;gt; -o &lt;span class="nv">subvolid&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">5&lt;/span> /mnt
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ &lt;span class="nb">cd&lt;/span> /mnt
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ sudo btrfs subvolume create &amp;lt;name&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ sudo btrfs subvolume list /
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;!-- raw HTML omitted -->: Btrfs分区名
+&lt;!-- raw HTML omitted -->: 子卷名称&lt;/p>
+&lt;h3 id="挂载btrfs子卷为交换区">挂载Btrfs子卷为交换区&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">$ sudo vim /etc/fstab
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">UUID&lt;/span>&lt;span class="o">=&lt;/span>&amp;lt;UUID&amp;gt; /swap btrfs &lt;span class="nv">subvol&lt;/span>&lt;span class="o">=&lt;/span>/&amp;lt;name&amp;gt;,defaults &lt;span class="m">0&lt;/span> &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">/swap/swapfile swap swap defaults &lt;span class="m">0&lt;/span> &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ &lt;span class="nb">cd&lt;/span> /
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ sudo mkdir swap
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ sudo mount -a
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ sudo btrfs filesystem mkswapfile --size 8g --uuid clear /swap/swapfile
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ sudo swapon /swap/swapfile
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">$ sudo mount -a
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;!-- raw HTML omitted --> : Btrfs分区UUID&lt;/p>
+&lt;p>&lt;!-- raw HTML omitted -->: 子卷名称&lt;/p>
+&lt;h3 id="docker-ufwhttpsgithubcomchaifengufw-dockertabreadme-ov-fileufw-docker-e5b7a5e585b7">&lt;a class="link" href="https://github.com/chaifeng/ufw-docker?tab=readme-ov-file#ufw-docker-%E5%B7%A5%E5%85%B7" target="_blank" rel="noopener"
+>Docker UFW&lt;/a>&lt;/h3>
+&lt;p>如果希望允许外部网络访问 Docker 容器提供的服务，比如有一个容器的服务端口是 80。那就可以用以下命令来允许外部网络访问这个服务：&lt;/p>
+&lt;p>ufw route allow proto tcp from any to any port 80&lt;/p>
+&lt;p>这个命令会允许外部网络访问所有用 Docker 发布出来的并且内部服务端口为 80 的所有服务。&lt;/p>
+&lt;h3 id="btrfs--refindefi">Btrfs &amp;amp; RefindEFI&lt;/h3>
+&lt;p>/boot/refind_linux&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">&amp;#34;Boot using standard options&amp;#34; &amp;#34;root=PARTUUID=9255bf76-e8da-45be-9a61-4fdc63cfea7d rw rootflags=subvol=arch initrd=arch\boot\amd-ucode.img initrd=arch\boot\initramfs-%v.img&amp;#34;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="ffmpeg-将所有wmv转为mp4">FFMPEG 将所有wmv转为MP4&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> files in &lt;span class="k">$(&lt;/span>ls *.wmv&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">do&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ffmpeg -i &lt;span class="nv">$files&lt;/span> -c:v libx264 -crf &lt;span class="m">23&lt;/span> -c:a aac -q:a &lt;span class="m">100&lt;/span> &lt;span class="si">${&lt;/span>&lt;span class="nv">files&lt;/span>&lt;span class="p">%%.*&lt;/span>&lt;span class="si">}&lt;/span>.mp4
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">done&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>encode the video to H.264 video and AAC audio, using the default quality&lt;/p></description></item><item><title>Java Secure Random</title><link>https://itsusinn.github.io/p/java-secure-random/</link><pubDate>Wed, 23 Aug 2023 00:12:51 +0800</pubDate><guid>https://itsusinn.github.io/p/java-secure-random/</guid><description>&lt;p>Java标准库中的SecureRandom提供了一个密码学意义上的强随机数生成器。作为一个程序员，如果我们在JVM里出于安全考虑，想获取一个“真正随机”的数字，则很有可能将SecureRandom纳入考虑范围之内。
+&lt;strong>然而使用它需要十分的小心。&lt;/strong>&lt;/p>
+&lt;p>对SecureRandom起兴趣是因为一次对网络程序的排错，账号的登录过程十分缓慢。日志十分正常，没有任何警告或者错误。所以最初怀疑是某种逻辑错误导致的死循环。&lt;/p>
+&lt;p>jstack的thread dump如下&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">&amp;#34;main&amp;#34; #1 prio=5 os_prio=0 cpu=2745.71ms elapsed=56.22s tid=0x00007f2ec4014800 nid=0x2494 runnable [0x00007f2ecde32000]
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> java.lang.Thread.State: RUNNABLE
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at java.io.FileInputStream.readBytes(java.base@11.0.9.1/Native Method)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at java.io.FileInputStream.read(java.base@11.0.9.1/FileInputStream.java:279)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at java.io.FilterInputStream.read(java.base@11.0.9.1/FilterInputStream.java:133)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at sun.security.provider.NativePRNG$RandomIO.readFully(java.base@11.0.9.1/NativePRNG.java:424)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at sun.security.provider.NativePRNG$RandomIO.implGenerateSeed(java.base@11.0.9.1/NativePRNG.java:441)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - locked &amp;lt;0x00000000ed00c680&amp;gt; (a java.lang.Object)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at sun.security.provider.NativePRNG.engineGenerateSeed(java.base@11.0.9.1/NativePRNG.java:226)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at java.security.SecureRandom.generateSeed(java.base@11.0.9.1/SecureRandom.java:857)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at java.security.SecureRandom.getSeed(java.base@11.0.9.1/SecureRandom.java:840)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at net.mamoe.mirai.internal.network.protocol.packet.login.wtlogin.WtLogin15Kt.get_mpasswd(WtLogin15.kt:136)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at net.mamoe.mirai.internal.network.QQAndroidClient.&amp;lt;init&amp;gt;(QQAndroidClient.kt:268)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at net.mamoe.mirai.internal.network.QQAndroidClient.&amp;lt;init&amp;gt;(QQAndroidClient.kt:72)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at net.mamoe.mirai.internal.QQAndroidBot.initClient(QQAndroidBot.kt:62)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at net.mamoe.mirai.internal.QQAndroidBot.&amp;lt;init&amp;gt;(QQAndroidBot.kt:59)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at net.mamoe.mirai.internal.BotFactoryImpl.newBot(BotFactory.kt:34)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at net.mamoe.mirai.BotFactory$INSTANCE.newBot(BotFactory.kt:115)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at net.mamoe.mirai.console.MiraiConsole$INSTANCE.addBotImpl(MiraiConsole.kt:163)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at net.mamoe.mirai.console.MiraiConsole$INSTANCE.addBot(MiraiConsole.kt:125)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at net.mamoe.mirai.console.internal.MiraiConsoleImplementationBridge$doStart$11$1.invokeSuspend(MiraiConsoleImplementationBridge.kt:241)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:106)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:274)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:86)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:61)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at net.mamoe.mirai.console.internal.MiraiConsoleImplementationBridge.doStart$mirai_console(MiraiConsoleImplementationBridge.kt:214)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at net.mamoe.mirai.console.MiraiConsoleImplementation$Companion.start(MiraiConsoleImplementation.kt:209)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at net.mamoe.mirai.console.terminal.MiraiConsoleTerminalLoader.startAsDaemon(MiraiConsoleTerminalLoader.kt:153)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at net.mamoe.mirai.console.terminal.MiraiConsoleTerminalLoader.startAsDaemon$default(MiraiConsoleTerminalLoader.kt:152)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> at net.mamoe.mirai.console.terminal.MiraiConsoleTerminalLoader.main(MiraiConsoleTerminalLoader.kt:48)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Locked ownable synchronizers:
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> - &amp;lt;0x00000000ed5cf040&amp;gt; (a java.util.concurrent.locks.ReentrantLock$NonfairSync)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>可以看到程序阻塞在了&lt;code>java.security.SecureRandom&lt;/code>和&lt;code>java.io.FileInputStream.readBytes&lt;/code>。&lt;/p>
+&lt;p>看起来我们的 &lt;code>SecureRandom&lt;/code> 在读取什么文件？如果你了解&lt;a class="link" href="https://zh.wikipedia.org/wiki/%E7%B1%BBUnix%E7%B3%BB%E7%BB%9F" target="_blank" rel="noopener"
+>类Unix系统&lt;/a>的话就不难猜出这个文件是 &lt;a class="link" href="https://zh.wikipedia.org/wiki//dev/random" target="_blank" rel="noopener"
+>&lt;code>/dev/random&lt;/code>&lt;/a>。在GNU Linux上读取 &lt;code>/dev/random&lt;/code> 这个设备文件就会得到随机的字节(试试 &lt;code>cat /dev/random&lt;/code>?)。Linux系统会借助用户的鼠标输入、键盘输入、硬盘读取等环境噪声生成随机数。Linux将环境噪声保存在熵池中，使用&lt;code>cat /proc/sys/kernel/random/entropy_avail&lt;/code>可以查看熵池的大小。显然在服务器环境下这些噪声较为稀少，这就导致了在服务器上 &lt;code>/dev/random&lt;/code> 随机数生成缓慢。&lt;/p></description></item></channel></rss>
