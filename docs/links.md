@@ -6,7 +6,7 @@
 
 ## 应用
 
-[3-4-5 三体模拟](apps/three-body/index.md)
+[physics-simulation · 物理实验室](apps/physics-simulation/index.md)
 
 ## 订阅
 

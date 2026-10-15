@@ -98,6 +98,7 @@ as_creation = "date"
 "search.md" = "index.md"
 "post/index.md" = "index.md"
 "support.md" = "links.md"
+"apps/three-body/index.md" = "apps/physics-simulation/index.md"
 
 [[project.extra.social]]
 icon = "fontawesome/brands/github"

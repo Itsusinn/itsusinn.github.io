@@ -43,7 +43,7 @@ class Page(HTMLParser):
             self.canonical = attributes.get("href")
 
 
-def check(three_body_sha=None):
+def check(physics_simulation_sha=None):
     assert ROOT.is_dir(), "Run just build first"
     pages = {path: Page(path) for path in ROOT.rglob("*.html")}
     errors = []
@@ -82,7 +82,7 @@ def check(three_body_sha=None):
         for title in titles:
             assert title in page.html, f"Missing {title} in {route}"
 
-    for route, target in {"archives/": "", "search/": "", "post/": "", "support/": "links/"}.items():
+    for route, target in {"archives/": "", "search/": "", "post/": "", "support/": "links/", "apps/three-body/": "apps/physics-simulation/"}.items():
         page = pages[ROOT / route / "index.html"]
         assert urljoin(urljoin(ORIGIN, route), page.canonical) == urljoin(ORIGIN, target), f"Broken redirect: {route}"
         assert 'http-equiv="refresh"' in page.html
@@ -104,11 +104,11 @@ def check(three_body_sha=None):
     search = json.loads((ROOT / "search.json").read_text(encoding="utf-8"))
     locations = {item["location"].split("#")[0] for item in search["items"]}
     assert set(POSTS) <= locations, "Posts missing from native search index"
-    if three_body_sha is not None:
-        assert re.fullmatch(r"[0-9a-f]{40}", three_body_sha), "Invalid three-body commit"
-        app = ROOT / "apps/three-body"
+    if physics_simulation_sha is not None:
+        assert re.fullmatch(r"[0-9a-f]{40}", physics_simulation_sha), "Invalid physics-simulation commit"
+        app = ROOT / "apps/physics-simulation"
         manifest = json.loads((app / "version.json").read_text(encoding="utf-8"))
-        assert manifest == {"repository": "Itsusinn/three-body", "commit": three_body_sha}, "Unexpected three-body build"
+        assert manifest == {"repository": "Itsusinn/physics-simulation", "commit": physics_simulation_sha}, "Unexpected physics-simulation build"
         html = pages[app / "index.html"].html
         assert 'id="simulation"' in html, "Application canvas missing; placeholder was not replaced"
         assert "live_reload" not in html, "Development server output must not be published"
@@ -118,11 +118,11 @@ def check(three_body_sha=None):
         for wasm in wasm_files:
             with wasm.open("rb") as stream:
                 assert stream.read(8) == b"\x00asm\x01\x00\x00\x00", f"Invalid WASM header: {wasm.name}"
-        print(f"Validated three-body application at commit {three_body_sha}.")
+        print(f"Validated physics-simulation application at commit {physics_simulation_sha}.")
     print(f"Validated {len(pages)} HTML pages: local links and anchors, legacy URLs, blog views, RSS and search.")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--require-three-body", metavar="COMMIT", help="Require a production app bundle from this exact source commit")
-    check(parser.parse_args().require_three_body)
+    parser.add_argument("--require-physics-simulation", metavar="COMMIT", help="Require a production app bundle from this exact source commit")
+    check(parser.parse_args().require_physics_simulation)
