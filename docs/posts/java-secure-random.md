@@ -1,16 +1,19 @@
 ---
-title: "Java Secure Random"
-description: 
+title: Java Secure Random
 date: 2023-08-23T00:12:51+08:00
-image: 
-math: 
-license: 
-hidden: false
-comments: true
+slug: java-secure-random
+authors:
+  - ihsin
+categories:
+  - Java
 ---
+
+# Java Secure Random
 
 Java标准库中的SecureRandom提供了一个密码学意义上的强随机数生成器。作为一个程序员，如果我们在JVM里出于安全考虑，想获取一个“真正随机”的数字，则很有可能将SecureRandom纳入考虑范围之内。
 **然而使用它需要十分的小心。**
+
+<!-- more -->
 
 对SecureRandom起兴趣是因为一次对网络程序的排错，账号的登录过程十分缓慢。日志十分正常，没有任何警告或者错误。所以最初怀疑是某种逻辑错误导致的死循环。
 

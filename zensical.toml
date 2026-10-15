@@ -1,0 +1,110 @@
+[project]
+site_name = "iHsin的站点"
+site_description = "要让互联网激发批判性思考、有理有据的论证、共享的知识和经得起推敲的真相。"
+site_url = "https://itsusinn.github.io/"
+site_author = "iHsin"
+docs_dir = "docs"
+site_dir = "site"
+repo_url = "https://github.com/Itsusinn/itsusinn.github.io"
+repo_name = "Itsusinn/itsusinn.github.io"
+edit_uri = "edit/master/docs/"
+copyright = '文章采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可'
+nav = [
+  { "博客" = ["index.md"] },
+  { "链接" = "links.md" },
+]
+
+[project.theme]
+custom_dir = "overrides"
+variant = "modern"
+language = "zh"
+features = [
+  "navigation.tabs",
+  "navigation.sections",
+  "navigation.indexes",
+  "navigation.path",
+  "navigation.top",
+  "navigation.footer",
+  "search.highlight",
+  "content.action.edit",
+  "content.code.copy",
+  "toc.follow",
+]
+
+[project.theme.font]
+text = "Noto Sans SC"
+code = "JetBrains Mono"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+primary = "teal"
+accent = "teal"
+toggle = { icon = "lucide/moon", name = "切换到深色模式" }
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+primary = "teal"
+accent = "teal"
+toggle = { icon = "lucide/sun", name = "切换到浅色模式" }
+
+[project.markdown_extensions]
+admonition = {}
+attr_list = {}
+md_in_html = {}
+tables = {}
+toc = { permalink = true, slugify = { object = "pymdownx.slugs.slugify", kwds = { case = "lower" } } }
+"pymdownx.details" = {}
+"pymdownx.superfences" = {}
+"pymdownx.highlight" = { anchor_linenums = true, pygments_lang_class = true }
+"pymdownx.inlinehilite" = {}
+
+# The native blog owns the homepage and every post listing.
+[project.plugins.blog]
+blog_dir = "."
+post_dir = "posts"
+post_url_format = "p/{slug}"
+post_date_format = "yyyy年M月d日"
+post_excerpt = "required"
+post_readtime = true
+pagination_per_page = 5
+archive = true
+archive_name = "归档"
+archive_url_format = "archives/{date}"
+categories = true
+categories_name = "分类"
+categories_url_format = "categories/{slug}"
+authors = true
+authors_file = ".authors.yml"
+authors_profiles = true
+authors_profiles_name = "作者"
+draft_if_future_date = true
+
+[project.plugins.rss]
+match_path = "posts/.*"
+abstract_chars_count = -1
+json_feed_enabled = false
+
+[project.plugins.rss.feeds_filenames]
+rss_created = "index.xml"
+
+[project.plugins.rss.date_from_meta]
+as_creation = "date"
+
+# Retire Hugo-only landing pages without leaving dead bookmarks.
+[project.plugins.redirects.redirect_maps]
+"archives.md" = "index.md"
+"search.md" = "index.md"
+"post/index.md" = "index.md"
+"support.md" = "links.md"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/github"
+link = "https://github.com/Itsusinn"
+name = "iHsin 的 GitHub"
+
+[[project.extra.social]]
+icon = "lucide/rss"
+link = "https://itsusinn.github.io/index.xml"
+name = "RSS 订阅"
