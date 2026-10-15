@@ -92,4 +92,16 @@ draft: true
 - 推送到 `master` 或在 `master` 上手动运行工作流，检查成功后发布 `site/`。
 - 构建任务只有仓库读取权限；仅部署任务具有 Pages 写入和 OIDC 权限。
 
-构建完全独立，不依赖参考仓库、Go、Hugo 或主题更新工作流。
+博客构建不依赖参考仓库、Go、Hugo 或主题更新工作流。
+
+## 三体模拟应用
+
+`/apps/three-body/` 部署 [Itsusinn/three-body](https://github.com/Itsusinn/three-body) 的 Rust / WASM + WebGPU 应用。
+
+- 网站 CI 解析三体 `main` 的最新提交，并调用其可复用构建工作流，检查代码并编译完整静态产物。
+- 先运行 `just build` 生成博客，再将 `three-body-web` artifact 放入 `site/apps/three-body/`，最后校验博客链接、WASM 文件与 `version.json` 中的提交号。应用或博客失败都不发布。
+- 三体仓库的 `main` 构建成功后，通过其 `WEBSITE_DEPLOY_TOKEN` secret 即时触发本站 `deploy.yml`；令牌仅需本仓库的 Actions 写权限。本站不需要额外 secret，也不会反向触发三体发布。
+- 本仓库推送、PR 和手动运行也会构建应用；PR 不发布。多个发布串行进行，网站构建解析最新的三体提交。
+- 本地 `just serve` / `just check` 显示说明页，不要求安装 Rust。要运行模拟，请在三体仓库执行 `trunk serve --release`。
+
+线上版本可通过 <https://itsusinn.github.io/apps/three-body/version.json> 查询。Pages 使用 GitHub Actions，并在 `github-pages` 环境的分支策略中允许 `master`。

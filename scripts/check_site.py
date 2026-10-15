@@ -1,6 +1,8 @@
 """Validate the built blog with the Python standard library only."""
 
+import argparse
 import json
+import re
 from datetime import datetime
 from email.utils import parsedate_to_datetime
 from html.parser import HTMLParser
@@ -41,7 +43,7 @@ class Page(HTMLParser):
             self.canonical = attributes.get("href")
 
 
-def check():
+def check(three_body_sha=None):
     assert ROOT.is_dir(), "Run just build first"
     pages = {path: Page(path) for path in ROOT.rglob("*.html")}
     errors = []
@@ -102,8 +104,25 @@ def check():
     search = json.loads((ROOT / "search.json").read_text(encoding="utf-8"))
     locations = {item["location"].split("#")[0] for item in search["items"]}
     assert set(POSTS) <= locations, "Posts missing from native search index"
+    if three_body_sha is not None:
+        assert re.fullmatch(r"[0-9a-f]{40}", three_body_sha), "Invalid three-body commit"
+        app = ROOT / "apps/three-body"
+        manifest = json.loads((app / "version.json").read_text(encoding="utf-8"))
+        assert manifest == {"repository": "Itsusinn/three-body", "commit": three_body_sha}, "Unexpected three-body build"
+        html = pages[app / "index.html"].html
+        assert 'id="simulation"' in html, "Application canvas missing; placeholder was not replaced"
+        assert "live_reload" not in html, "Development server output must not be published"
+        assert list(app.glob("*.js")), "JavaScript loader missing"
+        wasm_files = list(app.glob("*.wasm"))
+        assert wasm_files, "WASM bundle missing"
+        for wasm in wasm_files:
+            with wasm.open("rb") as stream:
+                assert stream.read(8) == b"\x00asm\x01\x00\x00\x00", f"Invalid WASM header: {wasm.name}"
+        print(f"Validated three-body application at commit {three_body_sha}.")
     print(f"Validated {len(pages)} HTML pages: local links and anchors, legacy URLs, blog views, RSS and search.")
 
 
 if __name__ == "__main__":
-    check()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--require-three-body", metavar="COMMIT", help="Require a production app bundle from this exact source commit")
+    check(parser.parse_args().require_three_body)

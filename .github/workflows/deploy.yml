@@ -14,7 +14,29 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      sha: ${{ steps.source.outputs.sha }}
+    steps:
+      - name: Resolve three-body source commit
+        id: source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sha=$(gh api repos/Itsusinn/three-body/commits/main --jq .sha)
+          [[ "$sha" =~ ^[0-9a-f]{40}$ ]]
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
+  three-body:
+    needs: source
+    uses: Itsusinn/three-body/.github/workflows/build.yml@main
+    with:
+      ref: ${{ needs.source.outputs.sha }}
+
   build:
+    needs: [source, three-body]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -24,8 +46,17 @@ jobs:
           enable-cache: true
           cache-dependency-glob: justfile
       - uses: extractions/setup-just@v4
-      - name: Build and validate the blog
-        run: just check
+      - name: Build the blog
+        run: just build
+      - name: Install the three-body application
+        uses: actions/download-artifact@v4
+        with:
+          name: three-body-web
+          path: site/apps/three-body
+      - name: Validate the complete website
+        env:
+          THREE_BODY_SHA: ${{ needs.source.outputs.sha }}
+        run: uv run --no-project --python 3.13 scripts/check_site.py --require-three-body "$THREE_BODY_SHA"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
